@@ -14,6 +14,7 @@ repository = "https://github.com/wakamezake/Niceboat.git"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
+lhafile = "^0.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
