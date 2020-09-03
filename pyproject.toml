@@ -1,29 +1,23 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "setuptools_scm[toml]>=3.4",
-    "wheel",
-]
-build-backend = "setuptools.build_meta"
+requires = ["poetry>=1.0.0",]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+version = "0.0.1"
+name = "niceboat"
+authors = [ "wakame <hotwater1367@gmail.com>",]
+description = ""
+readme = "README.md"
+license = "MIT"
+homepage = ""
+repository = "https://github.com/wakamezake/Niceboat.git"
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+lhafile = "^0.2.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0.1"
 
 [tool.black]
-line-length = 79
-
-[tool.setuptools_scm]
-
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py
-isolated_build = True
-
-[testenv]
-commands = pytest
-deps =
-  pytest
-  pytest-black
-  pytest-cov
-  pytest-flake8
-  pytest-mypy
-  pytest-pydocstyle==2.0.0
-"""
+line-length = 99
