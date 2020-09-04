@@ -34,8 +34,8 @@ class Base:
     def __post_init__(self):
         self.file_begin: str = self.file_begin_prefix + self.name
         self.file_end: str = self.file_end_prefix + self.name
-        self.race_begin: str = self.race_begin_suffix + self.name
-        self.race_end: str = self.race_end_suffix + self.name
+        self.race_begin: str = self.name + self.race_begin_suffix
+        self.race_end: str = self.name + self.race_end_suffix
 
 
 RaceResult = Base(name='K')
