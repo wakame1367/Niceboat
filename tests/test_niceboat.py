@@ -5,7 +5,7 @@ from niceboat import RaceResult, BoatRaceParser
 
 @pytest.fixture
 def test_data():
-    with open('data/K200901.TXT', 'r', encoding='cp932') as f:
+    with open('tests/data/K200901.TXT', 'r', encoding='cp932') as f:
         txt = f.read()
     return txt
 
