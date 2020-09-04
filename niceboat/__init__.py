@@ -2,7 +2,7 @@
 import logging
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
-
+import re
 from pkg_resources import DistributionNotFound
 from pkg_resources import get_distribution
 
@@ -35,7 +35,9 @@ class Base:
         self.file_begin: str = self.file_begin_prefix + self.name
         self.file_end: str = self.file_end_prefix + self.name
         self.race_begin: str = self.name + self.race_begin_suffix
+        self.race_begin_pat = re.compile(r'\d+{}'.format(self.race_begin))
         self.race_end: str = self.name + self.race_end_suffix
+        self.race_end_pat = re.compile(r'\d+{}'.format(self.race_end))
 
 
 RaceResult = Base(name='K')
