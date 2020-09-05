@@ -55,6 +55,9 @@ class BaseParser(metaclass=ABCMeta):
 class BoatRaceParser(BaseParser):
     def __init__(self, rule: Base):
         self.rule = rule
+        self.header = ["landing_boat", "reg_number", "player_name",
+                       "mortar", "board", "exhibition",
+                       "approach", "start_timing", "race_time"]
 
     def parse(self, txt) -> pd.DataFrame:
         txt = self._preprocess(txt)
@@ -69,8 +72,37 @@ class BoatRaceParser(BaseParser):
             for players_per_round in line_per_race[1:]:
                 players_per_race = players_per_round.split('\n')[1:self.rule.players + 1]
                 for player in players_per_race:
-                    lines.append(player.split())
-        return pd.DataFrame(lines)
+                    player = player.lstrip()
+                    # http://boat-advisor.com/soft/manual/data_keyword.htm
+                    # https://github.com/wakamezake/boatrace/issues/1
+                    arrival_key = player[0].upper()
+                    split_values = player.split(maxsplit=len(self.header))
+                    # Late start
+                    if arrival_key == 'L':
+                        # ex. L0  3 4262 馬場貴也　 38   19  6.53       L .        .  .
+                        # ex. L0  1 2841 吉田稔　 57   30  6.78   1   L1.99      .  .
+                        approach = split_values[7]
+                        if approach == 'L':
+                            split_values = split_values[:7] + [None] * 3
+                        else:
+                            split_values[9] = split_values[9].lstrip('L')
+                            split_values = split_values[:9] + [None]
+                    # Flying Start
+                    elif arrival_key == 'F':
+                        # ex. F   1 4069 山本修一　 42   54  6.55   1   F0.01      .  .
+                        split_values[8] = split_values[8].lstrip('F')
+                    # Absence
+                    elif arrival_key == 'K':
+                        # ex. K0  1 3957 大谷直弘 23   36 K .         K .        .  .
+                        split_values = split_values[:6]
+                        split_values += [None] * 4
+
+                    race_time = split_values[-1]
+                    if race_time == '.  . ':
+                        split_values[-1] = None
+                    # skip index
+                    lines.append(split_values[1:])
+        return pd.DataFrame(lines, columns=self.header)
 
     def _preprocess(self, txt):
         txt = txt.replace('\u3000', '')
