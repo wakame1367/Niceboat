@@ -85,7 +85,7 @@ class BoatRaceParser(BaseParser):
                         if approach == 'L':
                             split_values = split_values[:7] + [None] * 3
                         else:
-                            split_values[9] = split_values[9].lstrip('L')
+                            split_values[8] = split_values[8].lstrip('L')
                             split_values = split_values[:9] + [None]
                     # Flying Start
                     elif arrival_key == 'F':
